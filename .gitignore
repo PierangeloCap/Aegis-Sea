@@ -1,0 +1,36 @@
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+!**/src/main/**/target/
+.mvn/
+!**/src/test/**/target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+*.log
+npm-debug.log*
+
+# Docker
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets (MAI committare!)
+*.env
+application-prod.yml
+*-secret.yml
+
+#report
+aegis-sea-report.md

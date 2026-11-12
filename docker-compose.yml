@@ -1,0 +1,61 @@
+services:
+
+  # ─── DATABASE AUTH ───────────────────────────────────────────
+  auth-db:
+    image: postgres:16-alpine
+    container_name: aegis-auth-db
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: aegis_user
+      POSTGRES_PASSWORD: aegis_pass
+    ports:
+      - "5433:5432"   # porta 5433 sull'host per evitare conflitti
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aegis_user -d auth_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── DATABASE VESSEL + POSTGIS ───────────────────────────────
+  vessel-db:
+    image: postgis/postgis:16-3.4-alpine   # PostgreSQL 16 + PostGIS 3.4
+    container_name: aegis-vessel-db
+    environment:
+      POSTGRES_DB: vessel_db
+      POSTGRES_USER: aegis_user
+      POSTGRES_PASSWORD: aegis_pass
+    ports:
+      - "5434:5432"   # porta 5434 sull'host
+    volumes:
+      - vessel-db-data:/var/lib/postgresql/data
+      - ./docker/postgres/init-postgis.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aegis_user -d vessel_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── DATABASE MISSION + AUDIT ────────────────────────────────
+  ops-db:
+    image: postgres:16-alpine
+    container_name: aegis-ops-db
+    environment:
+      POSTGRES_DB: ops_db
+      POSTGRES_USER: aegis_user
+      POSTGRES_PASSWORD: aegis_pass
+    ports:
+      - "5435:5432"   # porta 5435 sull'host
+    volumes:
+      - ops-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aegis_user -d ops_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  auth-db-data:
+  vessel-db-data:
+  ops-db-data:

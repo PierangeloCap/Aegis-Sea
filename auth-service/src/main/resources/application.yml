@@ -1,0 +1,38 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: auth-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/auth_db
+    username: aegis_user
+    password: aegis_pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+# Configurazione JWT custom
+jwt:
+  secret: "4165676973536561537570657253656372657456657279536563757265323032"
+  # 64 caratteri HEX = 32 byte = 256 bit (minimo per HMAC-SHA256)
+  # IN PRODUZIONE: usa variabile d'ambiente JWT_SECRET, mai hardcoded!
+  expiration-ms: 86400000  # 24 ore
+
+# Spring Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
