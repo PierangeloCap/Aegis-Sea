@@ -1,0 +1,20 @@
+# Profilo attivo quando si lancia con: --spring.profiles.active=docker
+# Oppure con variabile d'ambiente: SPRING_PROFILES_ACTIVE=docker
+
+spring:
+  datasource:
+    # In Docker i container comunicano tramite nome del servizio definito
+    # in docker-compose.yml, non tramite localhost.
+    # "auth-db" è il nome del servizio nel docker-compose.yml
+    url: jdbc:postgresql://auth-db:5432/auth_db
+    username: ${DB_USERNAME:aegis_user}   # valore da env var, fallback: aegis_user
+    password: ${DB_PASSWORD:aegis_pass}   # valore da env var, fallback: aegis_pass
+
+# JWT secret da variabile d'ambiente in produzione
+jwt:
+  secret: ${JWT_SECRET:4165676973536561537570657253656372657456657279536563757265323032}
+  # Se JWT_SECRET è definita come env var → usa quella
+  # Altrimenti → usa il valore di fallback (solo per Docker locale, mai in AWS)
+
+# In Docker i log SQL sono ridondanti, disabilitali
+spring.jpa.show-sql: false
