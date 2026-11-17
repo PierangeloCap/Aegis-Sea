@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    # In Docker comunica sulla rete interna col container vessel-db sulla porta standard 5432
+    url: jdbc:postgresql://vessel-db:5432/vessel_db
+    username: ${DB_USERNAME:aegis_user}
+    password: ${DB_PASSWORD:aegis_pass}
+
+  jpa:
+    show-sql: false

@@ -1,0 +1,37 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: vessel-service
+
+  datasource:
+    # 5434 è la porta mappata sull'host per il container aegis-vessel-db (PostGIS)
+    url: jdbc:postgresql://localhost:5434/vessel_db
+    username: aegis_user
+    password: aegis_pass
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+# Configurazione simulatore telemetria
+aegis:
+  simulation:
+    rate-ms: 1000       # Frequenza aggiornamento vettori (1 secondo)
+    vessel-count: 15     # Numero di imbarcazioni simulate nel Mediterraneo
+
+# Spring Actuator (health check per il frontend)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
